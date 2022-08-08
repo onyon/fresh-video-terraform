@@ -15,7 +15,7 @@ variable "cidr" {
 
 variable "availability_zone" {
   type        = list(string)
-  default     = [ "us-east-2a", "us-east-2b", "us-east-2c" ]
+  default     = [ "us-east-1a", "us-east-1e", "us-east-1f" ]
 }
 
 data "aws_caller_identity" "current" {}
