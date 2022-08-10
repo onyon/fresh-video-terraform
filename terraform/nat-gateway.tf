@@ -36,7 +36,7 @@ resource "aws_iam_instance_profile" "nat" {
 resource "aws_instance" "nat" {
   count = length(aws_subnet.public)
 
-  ami                         = "ami-0031d527521fcb961"
+  ami                         = "ami-0ee623c33d16bfaa7"
   associate_public_ip_address = true
   ebs_optimized               = true
   iam_instance_profile        = aws_iam_instance_profile.nat.name

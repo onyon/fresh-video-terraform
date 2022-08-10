@@ -53,3 +53,10 @@ resource "aws_ssm_parameter" "rds_pass" {
   tier  = "Advanced"
   value = random_password.rds_password.result
 }
+
+resource "aws_ssm_parameter" "rds_db" {
+  name  = "/${var.product}/${local.workspace}/${var.application}/rds/db"
+  type  = "String"
+  tier  = "Advanced"
+  value = "fresh_video"
+}

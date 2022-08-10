@@ -1,4 +1,4 @@
-schema "torrent_ninja" {
+schema "fresh_video" {
   comment = "Production Database."
   charset = "utf8mb4"
   collate = "utf8mb4_0900_ai_ci"
@@ -6,7 +6,7 @@ schema "torrent_ninja" {
 
 table "Actor" {
   comment = "Actors"
-  schema = schema.torrent_ninja
+  schema = schema.fresh_video
   column "Id" {
     type           = int
     null           = false
@@ -43,7 +43,7 @@ table "Actor" {
 
 table "ActorRelationship" {
   comment = "Media to Actor relationship"
-  schema = schema.torrent_ninja
+  schema = schema.fresh_video
   column "Actor" {
     type           = int
     null           = false
@@ -71,7 +71,7 @@ table "ActorRelationship" {
 
 table "Provider" {
   comment = "Media Providers"
-  schema = schema.torrent_ninja
+  schema = schema.fresh_video
   column "Id" {
     type           = int
     null           = false
@@ -83,7 +83,7 @@ table "Provider" {
     null    = false
     comment = "Provider Name"
   }
-  column "URL" {
+  column "Link" {
     type    = varchar(255)
     null    = false
     comment = "Provider URL"
@@ -108,7 +108,7 @@ table "Provider" {
 
 table "ProviderRelationship" {
   comment = "Media to Provider relationship"
-  schema = schema.torrent_ninja
+  schema = schema.fresh_video
   column "Provider" {
     type           = int
     null           = false
@@ -142,14 +142,21 @@ table "ProviderRelationship" {
   }
   column "Seen" {
     type    = datetime(0)
-    null    = true
+    null    = false
+    default = sql("CURRENT_TIMESTAMP(0)")
     comment = "Content last seen."
+  }
+  column "Rating" {
+    type    = varchar(16)
+    null    = true
+    comment = "Content Rating."
   }
   index "idx_unq_provider_relationship" {
     columns = [
       column.Provider,
       column.Media,
-      column.Country
+      column.Country,
+      column.Link
     ]
     unique = true
   }
@@ -157,7 +164,7 @@ table "ProviderRelationship" {
 
 table "Media" {
   comment = "Sourced Media"
-  schema  = schema.torrent_ninja
+  schema  = schema.fresh_video
   column "Id" {
     type           = int
     null           = false
@@ -204,11 +211,6 @@ table "Media" {
     null    = false
     comment = "Title of Media."
   }
-  column "Link" {
-    type    = varchar(255)
-    null    = false
-    comment = "Link to content source."
-  }
   column "Description" {
     type    = text
     null    = true
@@ -230,7 +232,7 @@ table "Media" {
     comment = "Title of Media."
   }
   column "Medium" {
-    type     = enum("movie","tvSeries","tvEpisode")
+    type     = enum("movie","tvShow","tvEpisode")
     null     = false
     unsigned = true
     comment  = "Content Medium."
@@ -260,6 +262,7 @@ table "Media" {
   index "idx_unq_slug" {
     columns = [
       column.Slug,
+      column.Medium,
       column.Parent,
       column.Season,
       column.Episode
@@ -270,7 +273,7 @@ table "Media" {
 
 table "ImdbTitleBasics" {
   comment = "Imdb Database"
-  schema = schema.torrent_ninja
+  schema = schema.fresh_video
   column "Id" {
     type           = varchar(10)
     null           = false
@@ -346,7 +349,7 @@ table "ImdbTitleBasics" {
 
 table "ImdbNameBasics" {
   comment = "Imdb Name Basics"
-  schema = schema.torrent_ninja
+  schema = schema.fresh_video
   column "Id" {
     type           = varchar(10)
     null           = false
@@ -393,7 +396,7 @@ table "ImdbNameBasics" {
 
 table "ImdbRatings" {
   comment = "Imdb Ratings"
-  schema = schema.torrent_ninja
+  schema = schema.fresh_video
   column "Id" {
     type    = varchar(10)
     null    = false
@@ -418,7 +421,7 @@ table "ImdbRatings" {
 
 table "ImdbTitleCrew" {
   comment = "Imdb Crew Association"
-  schema = schema.torrent_ninja
+  schema = schema.fresh_video
   column "Title" {
     type    = varchar(10)
     null    = false
@@ -443,7 +446,7 @@ table "ImdbTitleCrew" {
 
 table "ImdbTitleEpisode" {
   comment = "Imdb Episodes"
-  schema = schema.torrent_ninja
+  schema = schema.fresh_video
   column "Child" {
     type    = varchar(10)
     null    = false
@@ -478,7 +481,7 @@ table "ImdbTitleEpisode" {
 
 table "ImdbPrincipals" {
   comment = "Imdb Episodes"
-  schema = schema.torrent_ninja
+  schema = schema.fresh_video
   column "Id" {
     type    = varchar(10)
     null    = false
@@ -520,7 +523,7 @@ table "ImdbPrincipals" {
 
 table "ImdbAkas" {
   comment = "Imdb Akas"
-  schema = schema.torrent_ninja
+  schema = schema.fresh_video
   column "Id" {
     type    = varchar(10)
     null    = false
